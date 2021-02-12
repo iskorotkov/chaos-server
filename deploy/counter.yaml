@@ -1,13 +1,7 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: chaos-app
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: server
-  namespace: chaos-app
   labels:
     app: server
   annotations:
@@ -30,19 +24,20 @@ spec:
           image: iskorotkov/chaos-server:v0.1.0
           resources:
             limits:
-              memory: "128Mi"
-              cpu: "500m"
+              memory: "64Mi"
+              cpu: "50m"
           ports:
-            - containerPort: 8811
+            - name: web
+              containerPort: 8811
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: server
-  namespace: chaos-app
 spec:
   selector:
     app: server
   ports:
-    - port: 8811
+    - name: web
+      port: 8811
       targetPort: 8811
